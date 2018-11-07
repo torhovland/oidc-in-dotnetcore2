@@ -88,7 +88,7 @@ function callApi() {
                 display("#ajax-result", xhr.response);
             }
         };
-        xhr.open("GET", "http://localhost:3721/identity", true);
+        xhr.open("GET", "https://localhost:44321/api/values", true);
         xhr.setRequestHeader("Authorization", "Bearer " + user.access_token);
         xhr.send();
     });

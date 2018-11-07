@@ -5,11 +5,21 @@ namespace IdSrv
 {
     public class Config
     {
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
+                new IdentityResources.Email()
+            };
+        }
+        
         public static IEnumerable<ApiResource> GetApiResources()
         {
             return new List<ApiResource>
             {
-                new ApiResource("api1", "My API")
+                new ApiResource("dotnet-api", ".NET API")
             };
         }
 
@@ -19,19 +29,11 @@ namespace IdSrv
             {
                 new Client
                 {
-                    ClientId = "client",
-
-                    // no interactive user, use the clientid/secret for authentication
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-
-                    // secret for authentication
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
-
-                    // scopes that client has access to
-                    AllowedScopes = { "api1" }
+                    ClientId = "js_oidc",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedScopes = { "openid", "profile", "email", "dotnet-api" },
+                    RedirectUris = { "http://localhost:7017/callback.html" },
+                    AllowedCorsOrigins = { "http://localhost:7017/" }
                 }
             };
         }

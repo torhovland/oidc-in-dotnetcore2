@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using IdentityServer4;
 using IdentityServer4.Models;
 
 namespace IdSrv
@@ -11,7 +12,7 @@ namespace IdSrv
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResources.Email()
+                new IdentityResource("favorittfarge", "Favorittfarge", new []{ "favorittfarge" })
             };
         }
         
@@ -31,7 +32,14 @@ namespace IdSrv
                 {
                     ClientId = "js_oidc",
                     AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowedScopes = { "openid", "profile", "email", "dotnet-api" },
+                    AllowAccessTokensViaBrowser = true,
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "favorittfarge", 
+                        "dotnet-api"
+                    },
                     RedirectUris = { "http://localhost:7017/callback.html" },
                     AllowedCorsOrigins = { "http://localhost:7017/" }
                 }

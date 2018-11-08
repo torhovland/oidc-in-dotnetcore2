@@ -68,7 +68,7 @@ namespace IdSrv
                 {
                     ClientId = "dotnet-server-side-plus-api",
                     ClientSecrets = {new Secret("foobar".Sha256())},
-                    RedirectUris = {"https://localhost:44344/signin-oidc"},
+                    RedirectUris = {"https://localhost:44317/signin-oidc"},
                     AllowedGrantTypes = GrantTypes.Code,
                     AllowedScopes =
                     {

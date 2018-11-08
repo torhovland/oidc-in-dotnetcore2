@@ -24,7 +24,7 @@ namespace IdSrv
         {
             return new List<ApiResource>
             {
-                new ApiResource("dotnet-api", ".NET API", new[] { JwtClaimTypes.Email, Favorittfarge })
+                new ApiResource("dotnet-api", ".NET API", new[] { JwtClaimTypes.Name, JwtClaimTypes.Email, Favorittfarge })
             };
         }
 

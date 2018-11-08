@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,16 @@ namespace WebApi.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            var user = HttpContext.User;
+            var claims = user.Claims.ToList();
+
+            return new[]
+            {
+                $"Namn: {user.Identity.Name}",
+                $"Brukarnamn (subject ID): {claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value}",
+                $"Epostadresse: {claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value}",
+                $"Favorittfarge: {claims.FirstOrDefault(c => c.Type == "favorittfarge")?.Value}"
+            };
         }
 
         // GET api/values/5

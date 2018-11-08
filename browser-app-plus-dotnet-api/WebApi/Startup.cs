@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApi
 {
@@ -29,12 +31,26 @@ namespace WebApi
 
             services.AddCors();
 
+            // Remove the default non-OIDC claims.
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             services
                 .AddAuthentication("Bearer")
                 .AddJwtBearer(options =>
                 {
+                    // These two lines are the only strictly necessary ones
                     options.Authority = "https://localhost:44336";
                     options.Audience = "dotnet-api";
+
+                    // This will enable access to the claims using HttpContext.User.Claims
+                    options.SaveToken = true;
+
+                    // This enable fix HttpContext.User.Identity.Name and role checks
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "name",
+                        RoleClaimType = "role"
+                    };
                 });
         }
 

@@ -47,6 +47,21 @@ namespace IdSrv
                     },
                     RedirectUris = { "http://localhost:7017/callback.html" },
                     AllowedCorsOrigins = { "http://localhost:7017/" }
+                },
+
+                new Client
+                {
+                    ClientId = "dotnet-server-side",
+                    ClientSecrets = { new Secret("foobar".Sha256()) },
+                    RedirectUris = { "https://localhost:44344/signin-oidc" },
+                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        Favorittfarge
+                    }
                 }
             };
         }

@@ -1,9 +1,15 @@
 ﻿@page
 @model AboutModel
 @{
-    ViewData["Title"] = "About";
+    ViewData["Title"] = "Min side";
 }
 <h2>@ViewData["Title"]</h2>
-<h3>@Model.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+<p>Namn: @Model.Namn</p>
+<p>Brukarnamn (subject ID): @Model.Brukarnamn</p>
+<p>Epostadresse: @Model.Epostadresse</p>
+<p>Favorittfarge: @Model.Favorittfarge</p>
+
+<form method="post">
+    <button type="submit" asp-page-handler="logout">Logg ut</button>
+</form>

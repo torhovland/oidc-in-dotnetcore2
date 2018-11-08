@@ -27,11 +27,9 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
             services.AddCors();
 
-            // Remove the default non-OIDC claims.
+            // Remove the default non-OIDC claims, otherwise the OIDC claims will not be added properly.
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services
@@ -39,8 +37,8 @@ namespace WebApi
                 .AddJwtBearer(options =>
                 {
                     // These two lines are the only strictly necessary ones
-                    options.Authority = "https://localhost:44336";
-                    options.Audience = "dotnet-api";
+                    options.Authority = Configuration["Oidc:Authority"];
+                    options.Audience = Configuration["Oidc:Audience"];
 
                     // This will enable access to the claims using HttpContext.User.Claims
                     options.SaveToken = true;
@@ -52,6 +50,8 @@ namespace WebApi
                         RoleClaimType = "role"
                     };
                 });
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

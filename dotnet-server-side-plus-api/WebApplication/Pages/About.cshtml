@@ -1,0 +1,23 @@
+﻿@page
+@model AboutModel
+@{
+    ViewData["Title"] = "Min side";
+}
+<h2>@ViewData["Title"]</h2>
+
+<p>Namn: @Model.Namn</p>
+<p>Brukarnamn (subject ID): @Model.Brukarnamn</p>
+<p>Epostadresse: @Model.Epostadresse</p>
+<p>Favorittfarge: @Model.Favorittfarge</p>
+
+<h3>Kallar web API-operasjonen frå Javascript</h3>
+
+<code id="js-output">Hello</code>
+
+<script>
+
+</script>
+
+<form method="post">
+    <button type="submit" asp-page-handler="logout">Logg ut</button>
+</form>

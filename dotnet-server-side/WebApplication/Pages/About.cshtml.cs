@@ -4,6 +4,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -30,8 +32,8 @@ namespace WebApplication.Pages
         public async Task<IActionResult> OnPostLogoutAsync()
         {
             try {
-                await HttpContext.SignOutAsync("Cookies");
-                await HttpContext.SignOutAsync("oidc");
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
             } catch (InvalidOperationException) {
                 // No contact with identity server. Just delete the browser cookie instead.
                 HttpContext.Response.Cookies.Delete("auth");

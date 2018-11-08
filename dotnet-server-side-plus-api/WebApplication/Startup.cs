@@ -28,14 +28,14 @@ namespace WebApplication
             services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = "oidc";
+                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 })
                 .AddCookie(options =>
                 {
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                     options.Cookie.Name = "auth";
                 })
-                .AddOpenIdConnect("oidc", options =>
+                .AddOpenIdConnect(options =>
                 {
                     const string favorittfarge = "favorittfarge";
 

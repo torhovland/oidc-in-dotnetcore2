@@ -31,8 +31,8 @@ namespace WebApplication.Pages
         public async Task<IActionResult> OnPostLogoutAsync()
         {
             try {
-                await HttpContext.SignOutAsync("Cookies");
-                await HttpContext.SignOutAsync("oidc");
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
             } catch (InvalidOperationException) {
                 // No contact with identity server. Just delete the browser cookie instead.
                 HttpContext.Response.Cookies.Delete("auth");

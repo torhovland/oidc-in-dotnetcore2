@@ -54,7 +54,7 @@ namespace IdSrv
                     ClientId = "dotnet-server-side",
                     ClientSecrets = { new Secret("foobar".Sha256()) },
                     RedirectUris = { "https://localhost:44344/signin-oidc" },
-                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    AllowedGrantTypes = GrantTypes.Code,
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
@@ -69,8 +69,7 @@ namespace IdSrv
                     ClientId = "dotnet-server-side-plus-api",
                     ClientSecrets = {new Secret("foobar".Sha256())},
                     RedirectUris = {"https://localhost:44344/signin-oidc"},
-                    AllowedGrantTypes = GrantTypes.Hybrid,
-                    AllowAccessTokensViaBrowser = true,
+                    AllowedGrantTypes = GrantTypes.Code,
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,

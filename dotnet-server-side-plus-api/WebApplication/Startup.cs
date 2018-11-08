@@ -1,12 +1,10 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +28,10 @@ namespace WebApplication
 
             services.AddAuthentication(options =>
                 {
+                    // Always try to use an existing login session stored in a cookie first
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+                    // If that fails, use OpenID Connect to log the user on.
                     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(options =>
@@ -62,7 +63,7 @@ namespace WebApplication
                     options.ClientId = Configuration["Oidc:ClientId"];
                     options.ClientSecret = Configuration["Oidc:ClientSecret"];
 
-                    options.ResponseType = "code id_token token";
+                    options.ResponseType = "code";
 
                     options.Scope.Clear();
                     options.Scope.Add("openid");
@@ -71,12 +72,16 @@ namespace WebApplication
                     options.Scope.Add(favorittfarge);
                     options.Scope.Add(Configuration["Oidc:Audience"]);
 
-                    options.ClaimActions.Remove("amr");
+                    // Pull the user's claims from the userinfo endpoint on the identity server
+                    options.GetClaimsFromUserInfoEndpoint = true;
+
+                    // Need to specify any custom claims that we want to pull into HttpContext.User.Claims
                     options.ClaimActions.MapJsonKey(favorittfarge, favorittfarge);
 
-                    options.GetClaimsFromUserInfoEndpoint = true;
+                    // Allow us to extract the access token using HttpContext.GetTokenAsync() and make it available to Javascript
                     options.SaveTokens = true;
 
+                    // This enable fix HttpContext.User.Identity.Name and role checks
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         NameClaimType = "name",

@@ -28,7 +28,10 @@ namespace WebApplication
 
             services.AddAuthentication(options =>
                 {
+                    // Always try to use an existing login session stored in a cookie first
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+                    // If that fails, use OpenID Connect to log the user on.
                     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 })
                 .AddCookie(options =>
@@ -44,7 +47,7 @@ namespace WebApplication
                     options.ClientId = Configuration["Oidc:ClientId"];
                     options.ClientSecret = Configuration["Oidc:ClientSecret"];
 
-                    options.ResponseType = "code id_token";
+                    options.ResponseType = "code";
 
                     options.Scope.Clear();
                     options.Scope.Add("openid");
@@ -52,12 +55,13 @@ namespace WebApplication
                     options.Scope.Add("email");
                     options.Scope.Add(favorittfarge);
 
-                    options.ClaimActions.Remove("amr");
+                    // Pull the user's claims from the userinfo endpoint on the identity server
+                    options.GetClaimsFromUserInfoEndpoint = true;
+
+                    // Need to specify any custom claims that we want to pull into HttpContext.User.Claims
                     options.ClaimActions.MapJsonKey(favorittfarge, favorittfarge);
 
-                    options.GetClaimsFromUserInfoEndpoint = true;
-                    options.SaveTokens = true;
-
+                    // This enable fix HttpContext.User.Identity.Name and role checks
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         NameClaimType = "name",

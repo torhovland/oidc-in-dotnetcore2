@@ -44,7 +44,7 @@ namespace WebApi
                     // This will enable access to the claims using HttpContext.User.Claims
                     options.SaveToken = true;
 
-                    // This enable fix HttpContext.User.Identity.Name and role checks
+                    // This will fix HttpContext.User.Identity.Name and role checks
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         NameClaimType = "name",

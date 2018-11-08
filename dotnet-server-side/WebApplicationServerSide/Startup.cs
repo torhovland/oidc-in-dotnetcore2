@@ -61,7 +61,7 @@ namespace WebApplication
                     // Need to specify any custom claims that we want to pull into HttpContext.User.Claims
                     options.ClaimActions.MapJsonKey(favorittfarge, favorittfarge);
 
-                    // This enable fix HttpContext.User.Identity.Name and role checks
+                    // This will fix HttpContext.User.Identity.Name and role checks
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         NameClaimType = "name",

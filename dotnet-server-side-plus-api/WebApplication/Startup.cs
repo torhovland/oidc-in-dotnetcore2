@@ -1,9 +1,12 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +33,22 @@ namespace WebApplication
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 })
+                .AddJwtBearer(options =>
+                {
+                    // These two lines are the only strictly necessary ones
+                    options.Authority = Configuration["Oidc:Authority"];
+                    options.Audience = Configuration["Oidc:Audience"];
+
+                    // This will enable access to the claims using HttpContext.User.Claims
+                    options.SaveToken = true;
+
+                    // This enable fix HttpContext.User.Identity.Name and role checks
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "name",
+                        RoleClaimType = "role"
+                    };
+                })
                 .AddCookie(options =>
                 {
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
@@ -43,13 +62,14 @@ namespace WebApplication
                     options.ClientId = Configuration["Oidc:ClientId"];
                     options.ClientSecret = Configuration["Oidc:ClientSecret"];
 
-                    options.ResponseType = "code id_token";
+                    options.ResponseType = "code id_token token";
 
                     options.Scope.Clear();
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
                     options.Scope.Add("email");
                     options.Scope.Add(favorittfarge);
+                    options.Scope.Add(Configuration["Oidc:Audience"]);
 
                     options.ClaimActions.Remove("amr");
                     options.ClaimActions.MapJsonKey(favorittfarge, favorittfarge);

@@ -62,6 +62,23 @@ namespace IdSrv
                         IdentityServerConstants.StandardScopes.Email,
                         Favorittfarge
                     }
+                },
+
+                new Client
+                {
+                    ClientId = "dotnet-server-side-plus-api",
+                    ClientSecrets = {new Secret("foobar".Sha256())},
+                    RedirectUris = {"https://localhost:44344/signin-oidc"},
+                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    AllowAccessTokensViaBrowser = true,
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        Favorittfarge,
+                        "dotnet-api"
+                    }
                 }
             };
         }

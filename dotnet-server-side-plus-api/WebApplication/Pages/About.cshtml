@@ -15,7 +15,53 @@
 <code id="js-output">Hello</code>
 
 <script>
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
 
+    function display(selector, data) {
+        if (data && typeof data === 'string') {
+            try {
+                data = JSON.parse(data);
+            }
+            catch (e) { }
+        }
+        if (data && typeof data !== 'string') {
+            data = JSON.stringify(data, null, 2);
+        }
+        document.querySelector(selector).textContent = data;
+    }
+
+    var accessToken = getCookie('access-token');
+
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function (e) {
+        if (xhr.status >= 400) {
+            display("#js-output", {
+                status: xhr.status,
+                statusText: xhr.statusText,
+                wwwAuthenticate: xhr.getResponseHeader("WWW-Authenticate")
+            });
+        }
+        else {
+            display("#js-output", xhr.response);
+        }
+    };
+    xhr.open("GET", "https://localhost:44344/api/values", true);
+    xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
+    xhr.send();
 </script>
 
 <form method="post">

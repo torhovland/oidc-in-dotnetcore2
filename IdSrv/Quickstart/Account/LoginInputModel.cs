@@ -12,6 +12,8 @@ namespace IdentityServer4.Quickstart.UI
         public string Username { get; set; }
         [Required]
         public string Password { get; set; }
+        public string Navn { get; set; }
+        public string Epostadresse { get; set; }
         public string Favorittfarge { get; set; }
         public bool RememberLogin { get; set; }
         public string ReturnUrl { get; set; }

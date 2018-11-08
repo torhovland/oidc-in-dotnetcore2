@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 
@@ -6,13 +7,16 @@ namespace IdSrv
 {
     public class Config
     {
+        protected internal const string Favorittfarge = "favorittfarge";
+
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResource("favorittfarge", "Favorittfarge", new []{ "favorittfarge" })
+                new IdentityResources.Email(),
+                new IdentityResource(Favorittfarge, "Favorittfarge", new []{ Favorittfarge })
             };
         }
         
@@ -20,7 +24,7 @@ namespace IdSrv
         {
             return new List<ApiResource>
             {
-                new ApiResource("dotnet-api", ".NET API")
+                new ApiResource("dotnet-api", ".NET API", new[] { JwtClaimTypes.Email, Favorittfarge })
             };
         }
 
@@ -37,7 +41,8 @@ namespace IdSrv
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "favorittfarge", 
+                        IdentityServerConstants.StandardScopes.Email,
+                        Favorittfarge, 
                         "dotnet-api"
                     },
                     RedirectUris = { "http://localhost:7017/callback.html" },

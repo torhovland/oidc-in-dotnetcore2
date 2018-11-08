@@ -29,7 +29,8 @@ namespace WebApi
 
             services.AddCors();
 
-            services.AddAuthentication("Bearer")
+            services
+                .AddAuthentication("Bearer")
                 .AddJwtBearer(options =>
                 {
                     options.Authority = "https://localhost:44336";

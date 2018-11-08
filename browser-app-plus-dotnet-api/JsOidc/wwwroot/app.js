@@ -13,7 +13,7 @@ var config = {
     // these two will be done dynamically from the buttons clicked, but are
     // needed if you want to use the silent_renew
     response_type: "id_token token",
-    scope: "openid profile favorittfarge dotnet-api",
+    scope: "openid profile email favorittfarge dotnet-api",
 
     // this will toggle if profile endpoint is used
     loadUserInfo: true,

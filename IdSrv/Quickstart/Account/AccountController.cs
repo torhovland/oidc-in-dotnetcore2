@@ -111,9 +111,13 @@ namespace IdentityServer4.Quickstart.UI
             {
                 var user = new TestUser
                 {
-                    SubjectId = model.Username.Sha256(), 
-                    Username = model.Username,
-                    Claims = {new Claim("favorittfarge", model.Favorittfarge)}
+                    SubjectId = model.Username, 
+                    Username = model.Navn,
+                    Claims =
+                    {
+                        new Claim(JwtClaimTypes.Email, model.Epostadresse),
+                        new Claim("favorittfarge", model.Favorittfarge),
+                    }
                 };
 
                 await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username));
@@ -131,7 +135,7 @@ namespace IdentityServer4.Quickstart.UI
                 }
 
                 // issue authentication cookie with subject ID and username
-                await HttpContext.SignInAsync(user.SubjectId, user.Username, props);
+                await HttpContext.SignInAsync(user.SubjectId, user.Username, props, user.Claims.ToArray());
 
                 if (context != null)
                 {
